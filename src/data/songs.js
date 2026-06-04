@@ -5,7 +5,8 @@ const songs = [
         artist: "Alexzavesa",
         album: "Playful Night",
         duration: 345,
-        url: "/songs/Alexzavesa-dance-playful-night.mp3"
+        url: "/songs/Alexzavesa-dance-playful-night.mp3",
+        cover: "/songscover/Alexzavesa-dance-playful-night.jpeg"
     }, 
     {
         id: 2,
@@ -13,7 +14,8 @@ const songs = [
         artist: "Artmylife",
         album: "Powerful Dramatic Trailer",
         duration: 420,
-        url: "/songs/Artmylife-powerful-dramatic-trailer.mp3"
+        url: "/songs/Artmylife-powerful-dramatic-trailer.mp3",
+        cover: "/songscover/Artmylife-powerful-dramatic-trailer.jpeg"
     }, 
      {
         id: 3,
@@ -21,7 +23,8 @@ const songs = [
         artist: "Energysound",
         album: "Powerful Percussion",
         duration: 230,
-        url: "/songs/Energysound-powerful-percussion.mp3"
+        url: "/songs/Energysound-powerful-percussion.mp3",
+        cover: "/songscover/Energysound-powerful-percussion.jpeg"
      },
       {
         id: 4,
@@ -29,7 +32,8 @@ const songs = [
         artist: "Fassounds",
         album: "Escape Your Love",
         duration: 315,
-        url: "/songs/Fassounds-escape-your-love-upbeat-fashion-pop-dance.mp3"
+        url: "/songs/Fassounds-escape-your-love-upbeat-fashion-pop-dance.mp3",
+        cover: "/songscover/Fassounds-escape-your-love-upbeat-fashion-pop-dance.jpeg"
       },
 
       {
@@ -38,7 +42,8 @@ const songs = [
         artist: "Ikoliks",
         album: "Acoustic Spring",
         duration: 350,
-        url: "/songs/Ikoliks_aj-acoustic-spring-mothers-day-music.mp3"
+        url: "/songs/Ikoliks_aj-acoustic-spring-mothers-day-music.mp3",
+        cover: "/songscover/Ikoliks_aj-acoustic-spring-mothers-day-music.jpeg"
       },
 
       {
@@ -47,7 +52,8 @@ const songs = [
         artist: "Kontraa",
         album: "Water Afro Pop",
         duration: 410,
-        url: "/songs/Kontraa-water-afro-pop-music.mp3"
+        url: "/songs/Kontraa-water-afro-pop-music.mp3",
+        cover: "/songscover/Kontraa-water-afro-pop-music.jpeg"
       }, 
 
       {
@@ -56,7 +62,8 @@ const songs = [
         artist: "Magpiemusic",
         album: "Action Trailer Promo Rock",
         duration: 330,
-        url: "/songs/Magpiemusic-action-trailer-promo-rock.mp3"
+        url: "/songs/Magpiemusic-action-trailer-promo-rock.mp3",
+        cover: "/songscover/Magpiemusic-action-trailer-promo-rock.jpeg"
       }
 
 ]

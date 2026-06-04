@@ -3,7 +3,7 @@ import songs from '../data/songs.js'
 import { useState } from 'react'
 
 export const useMusic = () => {
-    const [allSongs, setAllSongs] = useState(songs)
+    const [allSongs,] = useState(songs)
     const [currentSong, setCurrentSong] = useState(songs[0])
     const [currentSongIndex, setCurrentSongIndex] = useState(0)
     const [currentTime, setCurrentTime] = useState(0)

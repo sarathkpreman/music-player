@@ -25,9 +25,8 @@ export const Allsongs = ({allSongs, handlePlaySong,currentSongIndex, formatTime}
             <div
               key={song.id}
               className={`song-card ${
-                isActive ? "active" : ""
-              }`}
-            onClick={()=> handlePlaySong(song, index)}>
+                isActive ? "active" : ""}`}
+            onClick={()=> handlePlaySong(song, index)} >
               
 
 
