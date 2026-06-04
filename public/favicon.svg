@@ -1,0 +1,121 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+
+    <!-- Background -->
+    <linearGradient id="bg" x1="60" y1="60" x2="450" y2="450">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <!-- Recorder Body -->
+    <linearGradient id="body" x1="90" y1="120" x2="420" y2="390">
+      <stop offset="0%" stop-color="#FFD166"/>
+      <stop offset="50%" stop-color="#FF5E5B"/>
+      <stop offset="100%" stop-color="#7B61FF"/>
+    </linearGradient>
+
+    <!-- Window -->
+    <linearGradient id="window" x1="140" y1="220" x2="380" y2="320">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+
+    <!-- Tape -->
+    <linearGradient id="tape" x1="190" y1="240" x2="320" y2="280">
+      <stop offset="0%" stop-color="#00F5D4"/>
+      <stop offset="100%" stop-color="#F15BB5"/>
+    </linearGradient>
+
+    <!-- Soft Glow -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="120" fill="url(#bg)"/>
+
+  <!-- Recorder -->
+  <g filter="url(#glow)">
+
+    <!-- Main Body -->
+    <rect
+      x="82"
+      y="118"
+      width="348"
+      height="276"
+      rx="46"
+      fill="url(#body)"
+    />
+
+    <!-- Top Speaker -->
+    <rect
+      x="116"
+      y="145"
+      width="280"
+      height="48"
+      rx="18"
+      fill="#111827"
+      opacity="0.95"
+    />
+
+    <!-- Speaker dots -->
+    <g fill="#64748B">
+      <circle cx="145" cy="169" r="3"/>
+      <circle cx="160" cy="169" r="3"/>
+      <circle cx="175" cy="169" r="3"/>
+      <circle cx="190" cy="169" r="3"/>
+      <circle cx="205" cy="169" r="3"/>
+      <circle cx="220" cy="169" r="3"/>
+      <circle cx="235" cy="169" r="3"/>
+      <circle cx="250" cy="169" r="3"/>
+      <circle cx="265" cy="169" r="3"/>
+      <circle cx="280" cy="169" r="3"/>
+      <circle cx="295" cy="169" r="3"/>
+      <circle cx="310" cy="169" r="3"/>
+      <circle cx="325" cy="169" r="3"/>
+      <circle cx="340" cy="169" r="3"/>
+      <circle cx="355" cy="169" r="3"/>
+    </g>
+
+    <!-- Cassette Window -->
+    <rect
+      x="122"
+      y="214"
+      width="268"
+      height="102"
+      rx="24"
+      fill="url(#window)"
+    />
+
+    <!-- Left Reel -->
+    <circle cx="192" cy="265" r="44" fill="#F8FAFC"/>
+    <circle cx="192" cy="265" r="15" fill="#0F172A"/>
+
+    <!-- Right Reel -->
+    <circle cx="320" cy="265" r="44" fill="#F8FAFC"/>
+    <circle cx="320" cy="265" r="15" fill="#0F172A"/>
+
+    <!-- Tape -->
+    <path
+      d="M207 265H305"
+      stroke="url(#tape)"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+
+    <!-- Buttons -->
+    <rect x="138" y="344" width="46" height="15" rx="7.5" fill="#0F172A"/>
+    <rect x="198" y="344" width="46" height="15" rx="7.5" fill="#00F5D4"/>
+    <rect x="258" y="344" width="46" height="15" rx="7.5" fill="#F15BB5"/>
+    <rect x="318" y="344" width="46" height="15" rx="7.5" fill="#0F172A"/>
+
+  </g>
+
+</svg>
