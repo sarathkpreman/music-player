@@ -16,6 +16,12 @@ function App() {
           <Musicplayer 
           currentSong={music.currentSong}
           formatTime={music.formatTime}
+          duration={music.duration}
+          setDuration={music.setDuration}
+          currentTime={music.currentTime}
+          setCurrentTime={music.setCurrentTime}
+          handleNextSong={music.handleNextSong}
+          handlePreviousSong={music.handlePreviousSong}
           />
         </div>
         <div className="content-section">
