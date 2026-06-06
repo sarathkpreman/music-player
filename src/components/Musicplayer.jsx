@@ -23,11 +23,11 @@ export const Musicplayer = ({
     }
 
     const handleTimeUpdate = () => {
-
+        setCurrentTime(audio.currentTime)
     }
 
     const handleEnded = () => {
-      audio.addEventListener('loadedmetadata', handleLoadedMetaData)
+      handleNextSong()
 
     }
 
@@ -36,11 +36,11 @@ export const Musicplayer = ({
       audio.removeEventListener('timeupdate', handleTimeUpdate)
       audio.removeEventListener('ended', handleEnded)
     }
-  }, [setDuration, setCurrentTime, currentSong])
+  }, [setDuration, setCurrentTime, currentSong, handleNextSong])
 
   return (
     <div className="music-player">
-      <audio ref={audioRef} src={currentSong?.url} preload='metadata' crossOrigin='anonymus'/>
+      <audio ref={audioRef} src={currentSong?.url} preload='metadata' crossOrigin='anonymous'/>
 
       <div className="player-info">
         <div className="track-title">
@@ -66,7 +66,7 @@ export const Musicplayer = ({
     step="1"
     onChange={(e)=> 
     {
-      const newTime = (e.target.value)
+      const newTime = Number(e.target.value)
       audioRef.current.currentTime = newTime;
       setCurrentTime(newTime);
     }
