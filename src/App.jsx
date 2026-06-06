@@ -22,6 +22,7 @@ function App() {
           setCurrentTime={music.setCurrentTime}
           handleNextSong={music.handleNextSong}
           handlePreviousSong={music.handlePreviousSong}
+          handlePausePlay={music.handlePausePlay}
           />
         </div>
         <div className="content-section">
