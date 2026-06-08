@@ -1,5 +1,6 @@
 
-export const Allsongs = ({allSongs, handlePlaySong,currentSongIndex, formatTime}) => {
+
+export const Allsongs = ({allSongs, handlePlaySong,currentSongIndex, formatTime,}) => {
 
   return (
     <div className="songs-container">

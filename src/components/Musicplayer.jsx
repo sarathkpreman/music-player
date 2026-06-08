@@ -6,13 +6,24 @@ export const Musicplayer = ({
   currentTime, 
   setCurrentTime,  
   setDuration, 
+  duration,
   handleNextSong, 
   handlePreviousSong,
-  handlePausePlay
+  play,
+  pause,
+  isPlaying
  }) => {
   const audioRef = useRef(null);
 
-  
+
+    const handleTimeChange = (e) => {
+    const audio = audioRef.current
+    if(!audio) return
+    const newTime = parseFloat(e.target.value)
+    audio.currentTime = newTime
+    setCurrentTime(newTime)
+
+  }
 
   useEffect(()=> {
     const audio = audioRef.current
@@ -20,6 +31,7 @@ export const Musicplayer = ({
 
     const handleLoadedMetaData =()=> {
       setDuration(audio.duration)
+      setCurrentTime(0)
     }
 
     const handleTimeUpdate = () => {
@@ -31,12 +43,30 @@ export const Musicplayer = ({
 
     }
 
+    audio.addEventListener('loadedmetadata', handleLoadedMetaData)
+    audio.addEventListener('timeupdate', handleTimeUpdate)
+    audio.addEventListener('ended', handleEnded)
+
     return () => {
       audio.removeEventListener('loadedmetadata', handleLoadedMetaData)
       audio.removeEventListener('timeupdate', handleTimeUpdate)
       audio.removeEventListener('ended', handleEnded)
     }
   }, [setDuration, setCurrentTime, currentSong, handleNextSong])
+
+
+  useEffect(()=> {
+    const audio = audioRef.current
+    if(!audio) return
+
+    if(isPlaying) {
+      audio.play().catch((error) => console.log(error))
+    } else {
+      audio.pause()
+    }
+  }, [isPlaying])
+
+
 
   return (
     <div className="music-player">
@@ -60,21 +90,15 @@ export const Musicplayer = ({
   <input
     type="range"
     min="0"
-    max={currentSong?.duration || 0}
+    max={duration}
     value={currentTime}
     className="progress-range"
-    step="1"
-    onChange={(e)=> 
-    {
-      const newTime = Number(e.target.value)
-      audioRef.current.currentTime = newTime;
-      setCurrentTime(newTime);
-    }
-    }
+    step="0.01"
+    onChange={handleTimeChange}
   />
 
   <span className="time">
-    {formatTime(currentSong?.duration || 0)}
+    {formatTime(duration)}
   </span>
   </div>
 
@@ -83,8 +107,8 @@ export const Musicplayer = ({
         ⏮
       </button>
 
-      <button onClick={handlePausePlay}>
-        ▶️
+      <button onClick={()=> isPlaying ? pause() : play()}>
+        {isPlaying ? '⏸' : '▶'}
       </button>
 
       <button onClick={handleNextSong}>
