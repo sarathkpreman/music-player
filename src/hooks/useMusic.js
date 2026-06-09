@@ -4,40 +4,48 @@ import { useEffect, useState } from 'react'
 export const useMusic = () => {
   const [allSongs, setAllSongs] = useState(songs)
   const [currentSongIndex, setCurrentSongIndex] = useState(0)
-
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-
-  const [isPlaying, setIsPlaying] = useState()
-
+  const [isPlaying, setIsPlaying] = useState(false)
   const currentSong = allSongs[currentSongIndex]
 
   useEffect(() => {
+    let cancelled = false
     const loadSongs = async () => {
       const songsWithDuration = await Promise.all(
         songs.map((song) => {
           return new Promise((resolve) => {
             const audio = new Audio(song.url)
 
-            audio.addEventListener('loadedmetadata', () => {
-              resolve({
-                ...song,
-                duration: audio.duration,
-              })
-            })
+            let settled = false
+            const done = (resolvedDuration = 0) => {            if (settled) return
+            settled = true
+            clearTimeout(timeoutId)
+            resolve({ ...song, duration: resolvedDuration })
+          }
+          const timeoutId = setTimeout(() => done(song.duration ?? 0), 10000)
+
+          audio.addEventListener(
+            'loadedmetadata',
+            () => done(Number.isFinite(audio.duration) ? audio.duration : (song.duration ?? 0)),
+            { once: true }
+          )
+          audio.addEventListener('error', () => done(song.duration ?? 0), { once: true })
+        
           })
         })
       )
 
-      setAllSongs(songsWithDuration)
+    if (!cancelled) setAllSongs(songsWithDuration)
     }
 
     loadSongs()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const handlePlaySong = (song, index) => {
-  console.log("CLICKED", song.title)
-
   setCurrentSongIndex(index)
   setDuration(song.duration || 0)
   setCurrentTime(0)
@@ -49,16 +57,22 @@ export const useMusic = () => {
   const pause = () => setIsPlaying(false)
 
   const handleNextSong = () => {
-    setCurrentSongIndex((prev) => (prev + 1) % allSongs.length)
+      setCurrentSongIndex((prev) => {
+     const nextIndex = (prev + 1) % allSongs.length
+     setDuration(allSongs[nextIndex]?.duration ?? 0)
+      return nextIndex
+    })
 
     setCurrentTime(0)
     //setIsPlaying(false)
   }
 
   const handlePreviousSong = () => {
-    setCurrentSongIndex((prev) =>
-      prev === 0 ? allSongs.length - 1 : prev - 1
-    )
+      setCurrentSongIndex((prev) => {
+      const prevIndex = prev === 0 ? allSongs.length - 1 : prev - 1
+      setDuration(allSongs[prevIndex]?.duration ?? 0)
+      return prevIndex
+    })
 
     setCurrentTime(0)
       //setIsPlaying(false)

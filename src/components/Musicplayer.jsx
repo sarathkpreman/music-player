@@ -62,7 +62,7 @@ export const Musicplayer = ({
 
   if (isPlaying) {
     audio.play().catch((error) => {
-      console.log("PLAY FAILED", error)
+      console.error("PLAY FAILED", error)
     })
   } else {
     audio.pause()
