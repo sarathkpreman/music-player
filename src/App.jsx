@@ -22,7 +22,9 @@ function App() {
           setCurrentTime={music.setCurrentTime}
           handleNextSong={music.handleNextSong}
           handlePreviousSong={music.handlePreviousSong}
-          handlePausePlay={music.handlePausePlay}
+          play={music.play}
+          pause={music.pause}
+          isPlaying={music.isPlaying}
           />
         </div>
         <div className="content-section">
@@ -39,6 +41,7 @@ function App() {
             handlePlaySong={music.handlePlaySong}
             currentSongIndex={music.currentSongIndex}
             formatTime={music.formatTime}
+            duration={music.duration}
             />} />
             
             <Route path="/playlists" element={<Playlist />} />

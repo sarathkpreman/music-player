@@ -1,58 +1,109 @@
 import songs from '../data/songs.js'
-
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const useMusic = () => {
-    const [allSongs,] = useState(songs)
-    const [currentSong, setCurrentSong] = useState(songs[0])
-    const [currentSongIndex, setCurrentSongIndex] = useState(0)
-    const [currentTime, setCurrentTime] = useState(0)
-    const [duration, setDuration] = useState(0)
+  const [allSongs, setAllSongs] = useState(songs)
+  const [currentSongIndex, setCurrentSongIndex] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const currentSong = allSongs[currentSongIndex]
 
-    const handlePlaySong = (song, index) => {
-        setCurrentSong(song)
-        setCurrentSongIndex(index)
-        setDuration(song.duration)
+  useEffect(() => {
+    let cancelled = false
+    const loadSongs = async () => {
+      const songsWithDuration = await Promise.all(
+        songs.map((song) => {
+          return new Promise((resolve) => {
+            const audio = new Audio(song.url)
+
+            let settled = false
+            const done = (resolvedDuration = 0) => {            if (settled) return
+            settled = true
+            clearTimeout(timeoutId)
+            resolve({ ...song, duration: resolvedDuration })
+          }
+          const timeoutId = setTimeout(() => done(song.duration ?? 0), 10000)
+
+          audio.addEventListener(
+            'loadedmetadata',
+            () => done(Number.isFinite(audio.duration) ? audio.duration : (song.duration ?? 0)),
+            { once: true }
+          )
+          audio.addEventListener('error', () => done(song.duration ?? 0), { once: true })
+        
+          })
+        })
+      )
+
+    if (!cancelled) setAllSongs(songsWithDuration)
     }
-    const formatTime = (time) => {
-        if (typeof time !== "number" || isNaN(time)) {
-        return "0:00"
+
+    loadSongs()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const handlePlaySong = (song, index) => {
+  setCurrentSongIndex(index)
+  setDuration(song.duration || 0)
+  setCurrentTime(0)
+  setIsPlaying(true)
+}
+
+  const play = () => setIsPlaying(true)
+
+  const pause = () => setIsPlaying(false)
+
+  const handleNextSong = () => {
+      setCurrentSongIndex((prev) => {
+     const nextIndex = (prev + 1) % allSongs.length
+     setDuration(allSongs[nextIndex]?.duration ?? 0)
+      return nextIndex
+    })
+
+    setCurrentTime(0)
+    //setIsPlaying(false)
+  }
+
+  const handlePreviousSong = () => {
+      setCurrentSongIndex((prev) => {
+      const prevIndex = prev === 0 ? allSongs.length - 1 : prev - 1
+      setDuration(allSongs[prevIndex]?.duration ?? 0)
+      return prevIndex
+    })
+
+    setCurrentTime(0)
+      //setIsPlaying(false)
+    
+  }
+
+  const formatTime = (time) => {
+    if (typeof time !== 'number' || isNaN(time)) {
+      return '0:00'
     }
 
     const minutes = Math.floor(time / 60)
     const seconds = Math.floor(time % 60)
 
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`
-    }
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
 
-
-    const handleNextSong = () => {
-        setCurrentSongIndex((prev)=> {
-            const nextIndex = (prev + 1 ) % allSongs.length;
-            setCurrentSong(allSongs[nextIndex]);
-            return nextIndex
-        })
-    }   
-
-    const handlePreviousSong = () => {
-        setCurrentSongIndex((prev)=> {
-            const prevIndex = prev === 0 ? allSongs.length - 1 : prev - 1;
-            setCurrentSong(allSongs[prevIndex]);
-            return prevIndex
-        })
-    }
-
-    
-    return { allSongs, 
-        handlePlaySong, 
-        currentSongIndex, 
-        currentSong, 
-        currentTime, 
-        setCurrentTime, 
-        formatTime, 
-        duration, 
-        setDuration,
-        handleNextSong,
-        handlePreviousSong
-    } 
+  return {
+    allSongs,
+    currentSong,
+    currentSongIndex,
+    currentTime,
+    setCurrentTime,
+    duration,
+    setDuration,
+    isPlaying,
+    play,
+    pause,
+    handlePlaySong,
+    handleNextSong,
+    handlePreviousSong,
+    formatTime,
+  }
 }
