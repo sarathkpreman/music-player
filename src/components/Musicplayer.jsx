@@ -1,18 +1,21 @@
 import { useEffect, useRef } from 'react';
+import { useMusic } from '../context/MusicContext';
 
-export const Musicplayer = ({ 
-  currentSong, 
-  formatTime, 
-  currentTime, 
-  setCurrentTime,  
-  setDuration, 
-  duration,
-  handleNextSong, 
-  handlePreviousSong,
-  play,
-  pause,
-  isPlaying
- }) => {
+export const Musicplayer = () => {
+  const { 
+    currentSong, 
+    formatTime, 
+    currentTime, 
+    setCurrentTime,  
+    setDuration, 
+    duration,
+    handleNextSong, 
+    handlePreviousSong,
+    play,
+    pause,
+    isPlaying
+  } = useMusic();
+
   const audioRef = useRef(null);
 
 
