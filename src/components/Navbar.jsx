@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link,NavLink } from "react-router-dom"
 
 export const Navbar = () => {
     return (
@@ -11,8 +11,8 @@ export const Navbar = () => {
         </div>
 
         <div className="navbar-links">
-        <Link to="/allsongs" className={'nav-link-active'}>All Songs</Link>
-        <Link to="/playlists" className={'nav-link-active'}>Playlists</Link>
+        <NavLink to="/allsongs" className="nav-link-active">All Songs</NavLink>
+        <NavLink to="/playlists" className="nav-link-active">Playlists</NavLink>
         </div>
     </nav>
     )

@@ -497,10 +497,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: var(--space-4) var(--space-6);
   margin-bottom: var(--space-5);
-
   background: var(--bg-surface);
   border: 0.5px solid var(--border);
   border-radius: var(--radius-xl);
@@ -510,7 +508,6 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-
   text-decoration: none;
 }
 
@@ -536,14 +533,11 @@ body {
 
 .nav-link-active {
   text-decoration: none;
-
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
-
   padding: 8px 14px;
   border-radius: var(--radius-sm);
-
   transition:
     background var(--transition),
     color var(--transition);
