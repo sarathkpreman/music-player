@@ -15,16 +15,20 @@ export const MusicProvider = ({children}) => {
 
   useEffect(() => {
     let cancelled = false
+    const audios = []
     const loadSongs = async () => {
       const songsWithDuration = await Promise.all(
         songs.map((song) => {
           return new Promise((resolve) => {
             const audio = new Audio(song.url)
+            audios.push(audio)
 
             let settled = false
-            const done = (resolvedDuration = 0) => {            if (settled) return
+            const done = (resolvedDuration = 0) => {            
+              if (settled) return
             settled = true
             clearTimeout(timeoutId)
+            audio.src = ''
             resolve({ ...song, duration: resolvedDuration })
           }
           const timeoutId = setTimeout(() => done(song.duration ?? 0), 10000)
@@ -46,6 +50,10 @@ export const MusicProvider = ({children}) => {
     loadSongs()
     return () => {
       cancelled = true
+      audios.forEach((audio)=> {
+        audio.src = ''
+        audio.load()
+      })
     }
   }, [])
 
@@ -116,7 +124,7 @@ export const MusicProvider = ({children}) => {
 export const useMusic = () => {
   const contextValue  = useContext(MusicContext)
   if(!contextValue) {
-    throw new Error("useMusic must be ")
+    throw new Error("useMusic must be used within a MusicProvider")
   }
   return contextValue
 }
