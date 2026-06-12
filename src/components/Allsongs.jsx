@@ -1,6 +1,9 @@
 
+import { useMusic } from "../context/MusicContext"
 
-export const Allsongs = ({allSongs, handlePlaySong,currentSongIndex, formatTime,}) => {
+
+export const Allsongs = () => {
+  const { allSongs, handlePlaySong, currentSongIndex, formatTime } = useMusic()
 
   return (
     <div className="songs-container">
