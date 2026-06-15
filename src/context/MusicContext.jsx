@@ -12,6 +12,7 @@ export const MusicProvider = ({children}) => {
   const [duration, setDuration] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const currentSong = allSongs[currentSongIndex]
+  const [playlists, setPlaylists] = useState([])
 
   useEffect(() => {
     let cancelled = false
@@ -102,6 +103,35 @@ export const MusicProvider = ({children}) => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`
   }
 
+  const createPlaylist = (name) => {
+    const newPlaylist = {
+      id: Date.now(),
+      name: name,
+      songs: [],
+    }
+    setPlaylists((prevPlaylists) => [...prevPlaylists, newPlaylist])
+  }
+
+  const addSongToPlayList = (playlistId, song) => {
+    setPlaylists((prev) =>
+      prev.map((playlist) => {
+        if (playlist.id === playlistId) {
+          return {
+            ...playlist,
+            songs: [...playlist.songs, song],
+          }
+        } else {
+          return playlist
+        }
+      })
+    )
+  }
+
+
+  const handlePlaylistDelete = (playlistId) => {
+    setPlaylists((prev) => prev.filter((playlist) => playlist.id !== playlistId))
+  }
+
     return <MusicContext.Provider value={{
         allSongs,
     currentSong,
@@ -117,6 +147,10 @@ export const MusicProvider = ({children}) => {
     handleNextSong,
     handlePreviousSong,
     formatTime,
+    playlists,
+    createPlaylist,
+    addSongToPlayList,
+    handlePlaylistDelete
     }}>{children}</MusicContext.Provider>
 }
 
