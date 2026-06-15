@@ -67,9 +67,9 @@ export const Playlist = () => {
       <div className="playlist-list">
         {playlists.length === 0 ? 
         (<p className="message">No Playlists are created yet</p>) : 
-        (playlists.map((playlist, key)=> {
+        (playlists.map((playlist)=> {
           return(
-            <div className="playlist-item" key={key}>
+            <div className="playlist-item" key={playlist.id}>
               <div className="playlsit-header">
                 <h3>{playlist.name}</h3>
                 <div className="playlist-actions">
@@ -101,12 +101,12 @@ export const Playlist = () => {
                           <p>Not Songs Found</p>
                       </div>) 
                       : 
-                      (filteredSongs.slice(0, 5).map((song, key)=> {
+                      (filteredSongs.slice(0, 5).map((song)=> {
                         return(
-                          <div key={key} className="dropdown-item" onClick={()=> handleAddSong(song)}>
+                          <button type="buttton" key={song.id} className="dropdown-item" onClick={()=> handleAddSong(song)}>
                             <span className="song-title">{song.title}</span>
                             <span className="song-artist">{song.artist}</span>
-                          </div>
+                          </button>
                         )
                       }))}
                     </div>
@@ -116,13 +116,13 @@ export const Playlist = () => {
               <div className="playlist-songs">
                 {playlist.songs.length === 0 ? 
                 (<p className="message">No Songs in this playlist yet</p>) :
-                (playlist.songs.map((song, key)=> {
+                (playlist.songs.map((song)=> {
                   return(
-                    <div className="playlist-song-item" key={key} onClick={() => handlePlayFromPlayList(song)}>
+                    <button type="button" className="playlist-song-item" key={song.id} onClick={() => handlePlayFromPlayList(song)}>
                       <span className="song-title">{song.title}</span>
                       <span className="song-artist">{song.artist}</span>
                       <span className="song-duration">{song.duration}</span>
-                    </div>
+                    </button>
                   )
                 }))}
               </div>

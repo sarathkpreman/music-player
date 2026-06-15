@@ -105,7 +105,7 @@ export const MusicProvider = ({children}) => {
 
   const createPlaylist = (name) => {
     const newPlaylist = {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       name: name,
       songs: [],
     }
