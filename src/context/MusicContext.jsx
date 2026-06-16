@@ -12,7 +12,30 @@ export const MusicProvider = ({children}) => {
   const [duration, setDuration] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const currentSong = allSongs[currentSongIndex]
-  const [playlists, setPlaylists] = useState([])
+  
+  const [playlists, setPlaylists] = useState(() => {
+    try {
+      if (typeof window === 'undefined') return []
+      const raw = localStorage.getItem('musicPlayerPlayLists')
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
+  })
+
+  useEffect(() => {
+    try {
+      if(playlists.length > 0) {
+        localStorage.setItem('musicPlayerPlayLists', JSON.stringify(playlists))
+      } else {
+        localStorage.removeItem('musicPlayerPlayLists')
+      }
+    } catch {
+      // ignore write errors
+    }
+  }, [playlists])
+
+
 
   useEffect(() => {
     let cancelled = false
