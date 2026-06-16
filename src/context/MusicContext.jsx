@@ -17,7 +17,13 @@ export const MusicProvider = ({children}) => {
     try {
       if (typeof window === 'undefined') return []
       const raw = localStorage.getItem('musicPlayerPlayLists')
-      return raw ? JSON.parse(raw) : []
+      const parsed = raw ? JSON.parse(raw) : []
+        if (!Array.isArray(parsed)) return []
+        return parsed.map((p) => ({
+        id: p?.id ?? crypto.randomUUID(),
+        name: typeof p?.name === 'string' ? p.name : 'Untitled Playlist',
+        songs: Array.isArray(p?.songs) ? p.songs : [],
+      }))
     } catch {
       return []
     }
