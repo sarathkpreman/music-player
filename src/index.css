@@ -1,4 +1,15 @@
 /* =========================
+   FONTS
+   Single sans-serif (Inter) across the whole app — no italics, no second
+   family. Secondary text (artist names, durations, nav links, etc.) is
+   distinguished by color and weight instead of style/slant.
+   Loaded with font-display: swap so text renders immediately in the
+   fallback stack and swaps in once the webfont loads.
+========================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* =========================
    TOKENS
 ========================= */
 
@@ -17,7 +28,10 @@
   --text-muted:     rgba(28, 25, 20, 0.35);
 
   --accent:       #b5482e;
-  --accent-play:  #1f7a4d;
+  --accent-active: #9c3c26;
+  /* Muted, desaturated moss — distinct signal for "now playing" without
+     fighting the terracotta for attention */
+  --accent-play:  #6b8068;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -32,6 +46,14 @@
   --space-4: 16px;
   --space-5: 20px;
   --space-6: 24px;
+
+  /* Warm-tinted shadows instead of generic black, to match the paper tone */
+  --shadow-sm: 0 1px 2px rgba(28, 25, 20, 0.06);
+  --shadow-md: 0 10px 24px rgba(28, 25, 20, 0.1);
+
+  /* Single family for the whole app. Real tabular figures matter here
+     since durations/timestamps use font-variant-numeric: tabular-nums. */
+  --font-sans: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 /* =========================
@@ -47,14 +69,22 @@
 body {
   background: var(--bg-base);
   color: var(--text-primary);
-  font-family: "Iowan Old Style", "Georgia", "Times New Roman", serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.6;
+}
+
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* =========================
    APP LAYOUT
 ========================= */
+
 
 .app {
   min-height: 100vh;
@@ -77,7 +107,7 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
-  box-shadow: 0 1px 2px rgba(28, 25, 20, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 /* =========================
@@ -130,7 +160,7 @@ body {
   text-decoration: none;
   color: var(--text-secondary);
   font-size: 13px;
-  font-style: italic;
+  font-weight: 500;
   padding: 7px 12px;
   border-radius: var(--radius-sm);
   transition: background var(--transition), color var(--transition);
@@ -167,7 +197,6 @@ body {
 
 .songs-count {
   font-size: 12px;
-  font-style: italic;
   color: var(--text-secondary);
 }
 
@@ -200,11 +229,6 @@ body {
   background: transparent;
 }
 
-.song-card:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
 .song-card:hover {
   background: var(--bg-hover);
 }
@@ -232,7 +256,6 @@ body {
 .song-index {
   width: 20px;
   font-size: 12px;
-  font-style: italic;
   color: var(--text-muted);
   flex-shrink: 0;
   text-align: center;
@@ -276,7 +299,7 @@ body {
 
 .song-info p {
   font-size: 12px;
-  font-style: italic;
+  font-weight: 400;
   color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -318,7 +341,7 @@ body {
   font-size: 12px;
   cursor: pointer;
   transition: transform var(--transition), opacity var(--transition);
-  opacity: 0;
+  opacity: 0.001;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -326,7 +349,8 @@ body {
 }
 
 .song-card:hover .play-btn,
-.song-card.active .play-btn {
+.song-card.active .play-btn,
+.play-btn:focus-visible {
   opacity: 1;
 }
 
@@ -372,11 +396,31 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
-  box-shadow: 0 1px 2px rgba(28, 25, 20, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .music-player:hover {
   border-color: var(--border-hover);
+}
+
+/* =========================
+   PLAYER COVER ART
+========================= */
+
+.player-cover-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.player-cover {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-md);
 }
 
 /* =========================
@@ -399,7 +443,7 @@ body {
 .track-artist {
   margin-top: 4px;
   font-size: 0.9rem;
-  font-style: italic;
+  font-weight: 400;
   color: var(--text-secondary);
 }
 
@@ -441,7 +485,7 @@ body {
   height: 100%;
   background: var(--accent);
   border-radius: inherit;
-  transition: width 1s linear;
+
 }
 
 .progress-range::-webkit-slider-thumb {
@@ -476,8 +520,7 @@ body {
   gap: 16px;
 }
 
-.ctrl-btn,
-.control-btn {
+.ctrl-btn {
   width: 42px;
   height: 42px;
   border: 1px solid var(--border);
@@ -491,16 +534,14 @@ body {
   justify-content: center;
 }
 
-.ctrl-btn:hover,
-.control-btn:hover {
+.ctrl-btn:hover {
   background: var(--bg-hover);
   border-color: var(--border-hover);
   color: var(--text-primary);
   transform: translateY(-1px);
 }
 
-.ctrl-btn.primary,
-.play-btn-main {
+.ctrl-btn.primary {
   width: 58px;
   height: 58px;
   background: var(--accent);
@@ -509,13 +550,12 @@ body {
   font-size: 1.2rem;
 }
 
-.ctrl-btn.primary:hover,
-.play-btn-main:hover {
-  background: #9c3c26;
+.ctrl-btn.primary:hover {
+  background: var(--accent-active);
   transform: scale(1.06);
 }
 
-.play-btn-main:active {
+.ctrl-btn.primary:active {
   transform: scale(0.96);
 }
 
@@ -564,6 +604,9 @@ body {
   background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .navbar-brand {
@@ -597,7 +640,7 @@ body {
   text-decoration: none;
   color: var(--text-secondary);
   font-size: 14px;
-  font-style: italic;
+  font-weight: 500;
   padding: 8px 14px;
   border-radius: var(--radius-sm);
   transition: background var(--transition), color var(--transition);
@@ -662,7 +705,6 @@ body {
 .playlist-form input::placeholder,
 .song-search::placeholder {
   color: var(--text-muted);
-  font-style: italic;
 }
 
 .playlist-form input:focus,
@@ -697,7 +739,6 @@ body {
 
 .message {
   font-size: 13px;
-  font-style: italic;
   color: var(--text-secondary);
   padding: var(--space-3) 0;
 }
@@ -718,7 +759,7 @@ body {
   border-color: var(--border-hover);
 }
 
-.playlsit-header {
+.playlist-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -727,7 +768,7 @@ body {
   padding-bottom: var(--space-3);
 }
 
-.playlsit-header h3 {
+.playlist-header h3 {
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
@@ -744,7 +785,7 @@ body {
   background: transparent;
   color: var(--text-secondary);
   font-size: 12px;
-  font-style: italic;
+  font-weight: 500;
   padding: 6px 12px;
   cursor: pointer;
   transition: background var(--transition), color var(--transition), border-color var(--transition);
@@ -784,13 +825,12 @@ body {
   padding: var(--space-1);
   max-height: 220px;
   overflow-y: auto;
-  box-shadow: 0 10px 24px rgba(28, 25, 20, 0.12);
+  box-shadow: var(--shadow-md);
 }
 
 .drop-down-empty {
   padding: var(--space-3);
   font-size: 12.5px;
-  font-style: italic;
   color: var(--text-muted);
   text-align: center;
 }
@@ -824,7 +864,7 @@ body {
 
 .dropdown-item .song-artist {
   font-size: 11.5px;
-  font-style: italic;
+  font-weight: 400;
   color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -874,7 +914,7 @@ body {
 
 .playlist-song-item .song-artist {
   font-size: 12px;
-  font-style: italic;
+  font-weight: 400;
   color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -896,19 +936,41 @@ body {
 
 @media (max-width: 900px) {
   .app-main { grid-template-columns: 1fr; }
-  .player-section { position: static; height: auto; }
+
+  .player-section {
+    position: sticky;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    z-index: 90;
+    box-shadow: 0 -4px 16px rgba(28, 25, 20, 0.08);
+  }
+
   .songs-header { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
   .song-duration { display: none; }
-  .content-section { height: auto; }
+  .content-section {
+    height: auto;
+    overflow-y: visible;
+    padding-bottom: 220px;
+  }
 }
 
 @media (max-width: 768px) {
   .navbar { padding: var(--space-4); flex-direction: column; gap: var(--space-4); align-items: flex-start; }
   .navbar-links { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
   .logo-text { font-size: 1.15rem; }
-  .music-player { padding: 20px; }
-  .play-btn-main, .ctrl-btn.primary { width: 52px; height: 52px; }
-  .control-btn, .ctrl-btn { width: 38px; height: 38px; }
+
+ 
+  .music-player {
+    padding: 20px;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .ctrl-btn.primary { width: 52px; height: 52px; }
+  .ctrl-btn { width: 38px; height: 38px; }
   .playlist-form { flex-direction: column; }
   .create-btn { padding: 10px 0; }
   .playlist-song-item .song-artist { display: none; }
