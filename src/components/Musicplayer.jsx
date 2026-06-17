@@ -17,6 +17,7 @@ export const Musicplayer = () => {
   } = useMusic();
 
   const audioRef = useRef(null);
+  const fallbackCover = `https://placehold.co/260x260/f7f4ee/6b6358?text=${encodeURIComponent(currentSong?.title || 'pattu')}`
 
 
     const handleTimeChange = (e) => {
@@ -78,6 +79,24 @@ export const Musicplayer = () => {
   return (
     <div className="music-player">
       <audio ref={audioRef} src={currentSong?.url} preload='metadata' crossOrigin='anonymous' onEnded={handleNextSong}/>
+
+
+     <div className="player-cover-wrapper">
+        <img
+          key={currentSong?.id}
+          src={currentSong?.cover || fallbackCover}
+          alt={currentSong?.title || 'Album cover'}
+          className="player-cover"
+          onError={(e) => {
+            // Falls back to a generated placeholder if the cover URL is
+            // missing or fails to load, instead of showing a broken-image icon.
+            e.target.onerror = null
+            e.target.src = fallbackCover
+          }}
+        />
+      </div>
+ 
+
 
       <div className="player-info">
         <div className="track-title">

@@ -8,7 +8,7 @@ export const Playlist = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const [showDropdown, setShowDropdown] = useState(false)
 
-  const { playlists, createPlaylist, allSongs, addSongToPlayList, handlePlaySong, handlePlaylistDelete } = useMusic()
+  const { playlists, createPlaylist, allSongs, addSongToPlayList, handlePlaySong, handlePlaylistDelete, formatTime } = useMusic()
 
   const filteredSongs = allSongs.filter(song => {
     const match = song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -121,7 +121,7 @@ export const Playlist = () => {
                     <button type="button" className="playlist-song-item" key={song.id} onClick={() => handlePlayFromPlayList(song)}>
                       <span className="song-title">{song.title}</span>
                       <span className="song-artist">{song.artist}</span>
-                      <span className="song-duration">{song.duration}</span>
+                      <span className="song-duration">{formatTime(song.duration)}</span>
                     </button>
                   )
                 }))}
