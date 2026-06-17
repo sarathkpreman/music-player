@@ -83,19 +83,28 @@ input:focus-visible,
 
 /* =========================
    APP LAYOUT
+   .app is locked to the viewport height and never grows. Navbar sits at
+   the top, app-main fills the rest. Only .content-section scrolls — the
+   navbar and player are physically outside any scrolling context, so
+   they can't move no matter how tall the song list or playlist content
+   gets. This replaces the previous page-scroll + position:sticky model,
+   which broke whenever an ancestor's height math was off by anything.
 ========================= */
 
-
 .app {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
 }
 
 .app-main {
   display: grid;
   grid-template-columns: 340px 1fr;
   gap: var(--space-5);
-  min-height: calc(100vh - 40px);
+  flex: 1;
+  min-height: 0;
 }
 
 /* =========================
@@ -115,12 +124,10 @@ input:focus-visible,
 ========================= */
 
 .player-section {
-  position: sticky;
-  top: var(--space-5);
-  height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+  min-height: 0;
 }
 
 /* =========================
@@ -129,7 +136,7 @@ input:focus-visible,
 
 .content-section {
   min-height: 0;
-  height: calc(100vh - 40px);
+  height: 100%;
   overflow-y: auto;
 }
 
@@ -604,9 +611,11 @@ input:focus-visible,
   background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  /* No sticky/fixed positioning needed: .app is a fixed-height flex
+     column and the navbar is a normal flex child above .app-main, so
+     there's no scroll context for it to ever move within. It's
+     physically locked in place. */
+  flex-shrink: 0;
 }
 
 .navbar-brand {
@@ -932,30 +941,32 @@ input:focus-visible,
 
 /* =========================
    MOBILE
+   Same fixed-height .app model as desktop: .app-main switches from a
+   2-column grid to a vertical stack (content above, player below), and
+   .content-section remains the only scrolling region. The player is a
+   normal flex child with a fixed natural height — not sticky, not
+   absolutely positioned — so like the navbar, it's structurally
+   incapable of moving, since there's no scroll context around it.
 ========================= */
 
 @media (max-width: 900px) {
-  .app-main { grid-template-columns: 1fr; }
+  .app-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+
+  }
+
+  .content-section {
+    grid-row: 1;
+  }
 
   .player-section {
-    position: sticky;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: auto;
-    z-index: 90;
+    grid-row: 2;
     box-shadow: 0 -4px 16px rgba(28, 25, 20, 0.08);
   }
 
   .songs-header { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
   .song-duration { display: none; }
-  .content-section {
-    height: auto;
-    overflow-y: visible;
-    padding-bottom: 220px;
-  }
 }
 
 @media (max-width: 768px) {
@@ -963,14 +974,84 @@ input:focus-visible,
   .navbar-links { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
   .logo-text { font-size: 1.15rem; }
 
- 
   .music-player {
-    padding: 20px;
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "cover info controls"
+      "progress progress progress";
+    align-items: center;
+    column-gap: var(--space-3);
+    row-gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 
-  .ctrl-btn.primary { width: 52px; height: 52px; }
-  .ctrl-btn { width: 38px; height: 38px; }
+  .player-cover-wrapper {
+    grid-area: cover;
+    display: block;
+  }
+
+  .player-cover {
+    width: 52px;
+    height: 52px;
+    max-width: 52px;
+    border-radius: var(--radius-sm);
+  }
+
+  .player-info {
+    grid-area: info;
+    text-align: left;
+    min-width: 0;
+  }
+
+  .track-title {
+    font-size: 0.9rem;
+  }
+
+  .track-artist {
+    font-size: 0.75rem;
+    margin-top: 1px;
+  }
+
+  .player-controls {
+    grid-area: controls;
+    gap: 8px;
+  }
+
+  .ctrl-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+  }
+
+  .ctrl-btn.primary {
+    width: 40px;
+    height: 40px;
+  }
+
+  .progress-container {
+    grid-area: progress;
+    gap: 6px;
+  }
+
+
+  .progress-container .time {
+    display: none;
+  }
+
+  .progress-range::-webkit-slider-thumb {
+    width: 10px;
+    height: 10px;
+  }
+
+
+  .volume-container {
+    display: none;
+  }
+
   .playlist-form { flex-direction: column; }
   .create-btn { padding: 10px 0; }
   .playlist-song-item .song-artist { display: none; }
