@@ -92,7 +92,7 @@ input:focus-visible,
 ========================= */
 
 .app {
-  height: 100vh;
+  /* height: 100vh; */
   overflow: hidden;
   padding: var(--space-5);
   display: flex;
