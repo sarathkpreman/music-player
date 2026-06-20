@@ -92,7 +92,7 @@ input:focus-visible,
 ========================= */
 
 .app {
-  /* height: 100vh; */
+  height: 100vh;
   overflow: hidden;
   padding: var(--space-5);
   display: flex;
@@ -961,6 +961,9 @@ input:focus-visible,
   }
 
   .player-section {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
     grid-row: 2;
     box-shadow: 0 -4px 16px rgba(28, 25, 20, 0.08);
   }
